@@ -46,6 +46,10 @@ namespace ExamenVanguardia
 
             //Domain
             services.AddScoped<ClienteDomainService>();
+            services.AddScoped<ReservaDomainService>();
+            services.AddScoped<ReservaDetalleDomainService>();
+
+
 
 
             services.AddControllers();

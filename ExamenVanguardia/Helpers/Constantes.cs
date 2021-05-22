@@ -9,5 +9,9 @@ namespace ExamenVanguardia.Helpers
     {
         public const int Activo = 1;
         public const int Inactivo = 0;
+        public const string Mora = "MORA";
+        public const string Cancelado = "CANCELADO";
+
+
     }
 }

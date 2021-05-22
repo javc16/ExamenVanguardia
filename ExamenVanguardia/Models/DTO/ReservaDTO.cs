@@ -14,6 +14,7 @@ namespace ExamenVanguardia.Models.DTO
         public int IdCategoriaEvento { get; set; }
         public int IdCliente { get; set; }
         public int Estado { get; set; }
+        public List<ReservaDetalleDTO> detalle { get; set; }
 
         public static ReservaDTO DeModeloADTO(Reserva reserva)
         {

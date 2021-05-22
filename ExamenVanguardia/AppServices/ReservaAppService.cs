@@ -1,5 +1,6 @@
 ﻿using ExamenVanguardia.AppServices.Interfaces;
 using ExamenVanguardia.Context;
+using ExamenVanguardia.Domain;
 using ExamenVanguardia.Helpers;
 using ExamenVanguardia.Models.DTO;
 using Microsoft.EntityFrameworkCore;
@@ -13,10 +14,14 @@ namespace ExamenVanguardia.AppServices
     public class ReservaAppService:IReservaAppService
     {
         private readonly MyContext _context;
+        private readonly ReservaDomainService _reservaDomainService;
+        private readonly IReservaDetalleAppService _reservaDetalleAppService;
 
-        public ReservaAppService(MyContext context)
+        public ReservaAppService(MyContext context, ReservaDomainService reservaDomainService, IReservaDetalleAppService reservaDetalleAppService)
         {
-            _context = context;           
+            _context = context;
+            _reservaDomainService = reservaDomainService;
+            _reservaDetalleAppService = reservaDetalleAppService;
         }
 
         public IEnumerable<ReservaDTO> GetAll()
@@ -39,15 +44,78 @@ namespace ExamenVanguardia.AppServices
 
         public async Task<Response> Post(ReservaDTO reservaDTO)
         {
-
+            int days = 0;
             var SavedUser = await _context.Reserva.FirstOrDefaultAsync(r => r.Descripcion == reservaDTO.Descripcion);
             if (SavedUser != null)
             {
                 return new Response { Mensaje = $"Esta reservacion: {reservaDTO.Descripcion} ya esta en sistema" };
             }
-          
+            var alreadyReserved = await _context.Reserva.FirstOrDefaultAsync(r => r.FechaFinal>= reservaDTO.FechaInicial  && r.FechaInicial <= reservaDTO.FechaInicial);
+            if (alreadyReserved != null)
+            {
+                return new Response { Mensaje = $"Este horario ya fue reservado" };
+            }
+
+            if (reservaDTO.FechaInicial.DayOfWeek.Equals("Friday") || reservaDTO.FechaInicial.DayOfWeek.Equals("Saturday"))
+            {
+                days = 2;
+            } else if (reservaDTO.FechaInicial.DayOfWeek.Equals("Sunday"))
+            {
+                days = 3;
+            }
+            else 
+            {
+                days = 1;
+            }
+
+            if (days==1 &&(reservaDTO.FechaFinal.Hour > 21 || (reservaDTO.FechaInicial.Hour < 8 && reservaDTO.FechaInicial.Minute <=29)) )
+            {
+                return new Response { Mensaje = $"No se puede reservar en este horario de lunes a jueves" };
+            }
+            if (days == 2 && (reservaDTO.FechaFinal.Hour > 23 || reservaDTO.FechaInicial.Hour < 15))
+            {
+                return new Response { Mensaje = $"No se puede reservar en este horario los viernes y los sabados" };
+            }
+            else if(days==3)
+            {
+                return new Response { Mensaje = $"No se puede reservar en domingo" };
+            }
+            var cliente = await _context.Cliente.FirstOrDefaultAsync(r => r.Id == reservaDTO.IdCliente);
+            var message = _reservaDomainService.ValidarSiElClienteExiste(cliente);
+            if (message != string.Empty)
+            {
+                return new Response { Mensaje = message };
+            }
+
+
+            var categoriaEvento = await _context.CategoriaEvento.FirstOrDefaultAsync(r => r.Id == reservaDTO.IdCategoriaEvento);
+            message = _reservaDomainService.ValidarSiLaCategoriaDelEventoExiste(categoriaEvento);
+            if (message != string.Empty)
+            {
+                return new Response { Mensaje = message };
+            }
+
+            message = _reservaDomainService.ValidarQueElClienteTengaMasDe21(cliente);
+            if (message != string.Empty)
+            {
+                return new Response { Mensaje = message };
+            }
+
+            message = _reservaDomainService.ValidarEstadoCliente(cliente);
+            if (message != string.Empty)
+            {
+                return new Response { Mensaje = message };
+            }
             var reserva = ReservaDTO.DeDTOAModelo(reservaDTO);
             _context.Reserva.Add(reserva);
+
+            if (reservaDTO.detalle != null) 
+            {
+                foreach (var item in reservaDTO.detalle) 
+                {
+                    await _reservaDetalleAppService.Post(item);
+                }
+            }
             await _context.SaveChangesAsync();
             return new Response { Mensaje = $"Reservacion {reservaDTO.Descripcion} agregada exitosamente" };
         }
