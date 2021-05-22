@@ -4,14 +4,16 @@ using ExamenVanguardia.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ExamenVanguardia.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20210522035432_adding_field_estadoMobiliario_to_Mobiliario")]
+    partial class adding_field_estadoMobiliario_to_Mobiliario
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,8 +102,8 @@ namespace ExamenVanguardia.Migrations
                     b.Property<int>("Estado")
                         .HasColumnType("int");
 
-                    b.Property<string>("EstadoMobiliario")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("EstadoMobiliario")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

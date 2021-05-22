@@ -36,6 +36,8 @@ namespace ExamenVanguardia
             //services
             services.AddScoped<ICategoriaEventoAppService, CategoriaEventoAppService>();
             services.AddScoped<IEstadoClienteAppService, EstadoClienteAppService>();
+            services.AddScoped<IMobiliarioAppService, MobiliarioAppService>();
+
 
 
             services.AddControllers();
