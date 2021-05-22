@@ -16,8 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="AppServices\Interfaces\" />
-    <Folder Include="Context\" />
     <Folder Include="Domain\" />
   </ItemGroup>
 
