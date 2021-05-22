@@ -17,6 +17,7 @@ namespace ExamenVanguardia.Context
         public DbSet<CategoriaEvento> CategoriaEvento { get; set; }
         public DbSet<EstadoCliente> EstadoCliente { get; set; }
         public DbSet<Mobiliario> Mobiliario { get; set; }
+        public DbSet<Cliente> Cliente { get; set; }
 
 
 

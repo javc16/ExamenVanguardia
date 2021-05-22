@@ -1,6 +1,7 @@
 using ExamenVanguardia.AppServices;
 using ExamenVanguardia.AppServices.Interfaces;
 using ExamenVanguardia.Context;
+using ExamenVanguardia.Domain;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -37,7 +38,10 @@ namespace ExamenVanguardia
             services.AddScoped<ICategoriaEventoAppService, CategoriaEventoAppService>();
             services.AddScoped<IEstadoClienteAppService, EstadoClienteAppService>();
             services.AddScoped<IMobiliarioAppService, MobiliarioAppService>();
+            services.AddScoped<IClienteAppService, ClienteAppService>();
 
+            //Domain
+            services.AddScoped<ClienteDomainService>();
 
 
             services.AddControllers();
