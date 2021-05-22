@@ -43,7 +43,7 @@ namespace ExamenVanguardia.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Response>> PutCiudadano(CategoriaEventoDTO item)
+        public async Task<ActionResult<Response>> Put(CategoriaEventoDTO item)
         {
             return Ok(await _categoriaEventoAppService.PutCategoriaEvento(item));
         }
