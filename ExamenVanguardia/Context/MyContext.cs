@@ -18,6 +18,10 @@ namespace ExamenVanguardia.Context
         public DbSet<EstadoCliente> EstadoCliente { get; set; }
         public DbSet<Mobiliario> Mobiliario { get; set; }
         public DbSet<Cliente> Cliente { get; set; }
+        public DbSet<Reserva> Reserva { get; set; }
+        public DbSet<ReservaDetalle> ReservaDetalle { get; set; }
+
+
 
 
 

@@ -39,6 +39,10 @@ namespace ExamenVanguardia
             services.AddScoped<IEstadoClienteAppService, EstadoClienteAppService>();
             services.AddScoped<IMobiliarioAppService, MobiliarioAppService>();
             services.AddScoped<IClienteAppService, ClienteAppService>();
+            services.AddScoped<IReservaAppService, ReservaAppService>();
+            services.AddScoped<IReservaDetalleAppService, ReservaDetalleAppService>();
+
+
 
             //Domain
             services.AddScoped<ClienteDomainService>();

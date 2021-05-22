@@ -16,6 +16,43 @@ namespace ExamenVanguardia.Models
         public int IdCliente { get; set; }
         public Cliente Cliente { get; set; }
         public List<ReservaDetalle> Detalle { get; set; }
+        public int Estado { get; set; }
+        public sealed class Builder
+        {
+            private readonly Reserva _reserva;
+
+            public Builder(string descripcion, DateTime fechaInicial, DateTime fechaFinal, int idCategoriaEvento, int idCliente,int estado)
+            {
+                _reserva = new Reserva
+                {
+                    Descripcion = descripcion,
+                    FechaInicial = fechaInicial,
+                    FechaFinal = fechaFinal,
+                    IdCategoriaEvento = idCategoriaEvento,
+                    IdCliente = idCliente,
+                    Estado = estado
+                };
+            }
+
+            public Builder conCategoriaEvento(CategoriaEvento categoriaEvento)
+            {
+                _reserva.CategoriaEvento = categoriaEvento;
+                return this;
+            }
+
+            public Builder conCliente(Cliente cliente)
+            {
+                _reserva.Cliente = cliente;
+                return this;
+            }
+
+
+
+            public Reserva Constuir()
+            {
+                return _reserva;
+            }
+        }
 
     }
 }
